@@ -31,18 +31,24 @@ fetch('conf.json')
     // C'est pour obtenir la ville actuelle
     const currentCity = config.cities[0]; //  [0]la première ville par défaut
 
-    // Pour récupérer les données météo
-    fetchWeather(currentCity.name, currentCity.apiKey)
-      .then(data => {
-        const weather = {
-          city: data.name,
-          description: data.weather[0].description,
-          temperature: data.main.temp,
-          humidity: data.main.humidity,
-          icon: data.weather[0].icon,
-        };
-        displayWeather(weather);
-      })
-      .catch(error => console.error(error));
+    // Fonction pour récupérer et afficher les données météo
+    function updateWeather() {
+      fetchWeather(currentCity.name, currentCity.apiKey)
+        .then(data => {
+          const weather = {
+            city: data.name,
+            description: data.weather[0].description,
+            temperature: data.main.temp,
+            humidity: data.main.humidity,
+            icon: data.weather[0].icon,
+          };
+          displayWeather(weather);
+        })
+    }
+
+    // Appeler la fonction pour la première fois
+    updateWeather();
+
+    // Rafraîchir les données toutes les heures
+    setInterval(updateWeather, 3600000); // 3600000 ms équivalent à 1 heure
   })
-  .catch(error => console.error(error));
